@@ -20,11 +20,17 @@ class Property extends Model
         'bathrooms',
         'square_feet',
         'monthly_rent',
+        'utilities_cost',
+        'management_fee',
+        'total_monthly_cost',
         'status',
     ];
 
     protected $casts = [
         'monthly_rent' => 'integer', 
+        'utilities_cost' => 'integer',
+        'management_fee' => 'integer',
+        'total_monthly_cost' => 'integer',
         'bedrooms' => 'integer',
         'bathrooms' => 'decimal:1',
         'square_feet' => 'integer',

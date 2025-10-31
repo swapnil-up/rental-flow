@@ -9,6 +9,7 @@ use Domain\Properties\Models\Property;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Domain\Properties\Actions\CreatePropertyAction;
 
 class PropertiesController extends Controller
 {
@@ -28,11 +29,11 @@ class PropertiesController extends Controller
         return Inertia::render('Admin/Properties/Create');
     }
 
-    public function store(PropertyRequest $request): RedirectResponse
+    public function store(PropertyRequest $request, CreatePropertyAction $createPropertyAction): RedirectResponse
     {
         $propertyData = PropertyData::fromRequest($request->validated());
         
-        $property = Property::create($propertyData->toArray());
+        $property = $createPropertyAction->execute($propertyData);
 
         return redirect()
             ->route('admin.properties.show', $property)
