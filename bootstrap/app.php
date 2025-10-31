@@ -3,6 +3,7 @@
 use App\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\HandleInertiaRequests;
 
 return Application::configure(basePath: $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__))
     ->withRouting(
@@ -11,7 +12,7 @@ return Application::configure(basePath: $_ENV['APP_BASE_PATH'] ?? dirname(__DIR_
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+         $middleware->web(append: [HandleInertiaRequests::class,]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

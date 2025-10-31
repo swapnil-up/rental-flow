@@ -7,24 +7,25 @@ use App\Http\Controllers\Controller;
 use Domain\Properties\DataTransferObjects\PropertyData;
 use Domain\Properties\Models\Property;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PropertiesController extends Controller
 {
-    public function index(): View
+    public function index(): Response
     {
         $properties = Property::query()
             ->latest()
             ->paginate(15);
 
-        return view('admin.properties.index', [
+        return Inertia::render('Admin/Properties/Index', [
             'properties' => $properties,
         ]);
     }
 
-    public function create(): View
+    public function create(): Response
     {
-        return view('admin.properties.create');
+        return Inertia::render('Admin/Properties/Create');
     }
 
     public function store(PropertyRequest $request): RedirectResponse
@@ -38,9 +39,9 @@ class PropertiesController extends Controller
             ->with('success', 'Property created successfully!');
     }
 
-    public function show(Property $property): View
+    public function show(Property $property): Response
     {
-        return view('admin.properties.show', [
+        return Inertia::render('Admin/Properties/Show', [
             'property' => $property,
         ]);
     }
