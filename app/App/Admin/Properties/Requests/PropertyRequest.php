@@ -24,6 +24,8 @@ class PropertyRequest extends FormRequest
             'bathrooms' => ['required', 'numeric', 'min:0', 'max:20'],
             'square_feet' => ['required', 'integer', 'min:1'],
             'monthly_rent' => ['required', 'numeric', 'min:0'],
+            'utilities_cost' => ['sometimes', 'numeric', 'min:0'],
+            'management_fee' => ['sometimes', 'numeric', 'min:0'],
             'status' => ['sometimes', 'string', 'in:available,occupied,maintenance'],
         ];
     }

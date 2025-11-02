@@ -47,6 +47,21 @@
                 </div>
 
                 <div class="detail-row">
+                    <strong>Utilities Cost:</strong>
+                    <span>${{ formatMoney(property.utilities_cost) }}/month</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Management Fee:</strong>
+                    <span>${{ formatMoney(property.management_fee) }}/month</span>
+                </div>
+
+                <div class="detail-row">
+                    <strong>Total Monthly Cost:</strong>
+                    <span class="highlight">${{ formatMoney(property.total_monthly_cost) }}/month</span>
+                </div>
+
+                <div class="detail-row">
                     <strong>Status:</strong>
                     <span>{{ capitalize(property.status) }}</span>
                 </div>
@@ -126,5 +141,10 @@ h1 {
 
 .detail-row strong {
     font-weight: 600;
+}
+
+.highlight {
+    font-weight: 600;
+    color: #2779bd;
 }
 </style>

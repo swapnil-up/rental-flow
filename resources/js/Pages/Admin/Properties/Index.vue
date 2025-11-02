@@ -20,7 +20,7 @@
                     <th>Type</th>
                     <th>City</th>
                     <th>Bedrooms</th>
-                    <th>Monthly Rent</th>
+                    <th>Monthly Cost</th>
                     <th>Status</th>
                     <th></th>
                 </tr>
@@ -31,7 +31,7 @@
                     <td>{{ capitalize(property.type) }}</td>
                     <td>{{ property.city }}, {{ property.state }}</td>
                     <td>{{ property.bedrooms }}</td>
-                    <td>${{ formatMoney(property.monthly_rent) }}</td>
+                    <td>${{ formatMoney(property.total_monthly_cost) }}</td>
                     <td>{{ capitalize(property.status) }}</td>
                     <td>
                         <Link 

@@ -149,6 +149,34 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>Utilities Cost ($/month)</label>
+                <input 
+                    v-model.number="form.utilities_cost" 
+                    type="number" 
+                    step="0.01" 
+                    min="0"
+                    :class="{ 'has-error': form.errors.utilities_cost }"
+                >
+                <div v-if="form.errors.utilities_cost" class="error">
+                    {{ form.errors.utilities_cost }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Management Fee ($/month)</label>
+                <input 
+                    v-model.number="form.management_fee" 
+                    type="number" 
+                    step="0.01" 
+                    min="0"
+                    :class="{ 'has-error': form.errors.management_fee }"
+                >
+                <div v-if="form.errors.management_fee" class="error">
+                    {{ form.errors.management_fee }}
+                </div>
+            </div>
+
             <div class="form-actions">
                 <button type="submit" class="btn" :disabled="form.processing">
                     {{ form.processing ? 'Creating...' : 'Create Property' }}
@@ -174,6 +202,8 @@ const form = useForm({
     bathrooms: 0,
     square_feet: 0,
     monthly_rent: 0,
+    utilities_cost: 0,
+    management_fee: 0,
 });
 
 const submit = () => {
