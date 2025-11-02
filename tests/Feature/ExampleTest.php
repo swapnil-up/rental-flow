@@ -1,7 +1,20 @@
 <?php
 
-it('returns a successful response', function () {
-    $response = $this->get('/');
+namespace Tests\Feature;
 
-    $response->assertStatus(200);
-});
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    /**
+     * A basic feature test example.
+     */
+    public function test_example(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+}
