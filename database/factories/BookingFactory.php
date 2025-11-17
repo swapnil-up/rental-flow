@@ -22,4 +22,18 @@ class BookingFactory extends Factory
             'status' => 'pending',
         ];
     }
+
+    public function confirmed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'confirmed',
+        ]);
+    }
+
+    public function cancelled(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'cancelled',
+        ]);
+    }
 }
