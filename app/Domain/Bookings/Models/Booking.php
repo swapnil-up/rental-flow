@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Database\Factories\BookingFactory;
+use Domain\Bookings\Collections\BookingCollection;
+use Domain\Bookings\QueryBuilders\BookingQueryBuilder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Booking extends Model
@@ -67,5 +69,16 @@ class Booking extends Model
     protected static function newFactory()
     {
         return BookingFactory::new();
+    }
+
+
+    public function newEloquentBuilder($query): BookingQueryBuilder
+    {
+        return new BookingQueryBuilder($query);
+    }
+
+    public function newCollection(array $models = []): BookingCollection
+    {
+        return new BookingCollection($models);
     }
 }
