@@ -9,8 +9,14 @@
 
         <div class="details-card">
             <h3>Property Details</h3>
-            
+
             <div class="details-grid">
+                <strong>Status:</strong>
+                <span>
+                    <span class="badge" :style="{ backgroundColor: getStatusColor(property.status) }">
+                        {{ capitalize(property.status) }}
+                    </span>
+                </span>
                 <div class="detail-row">
                     <strong>Type:</strong>
                     <span>{{ capitalize(property.type) }}</span>
@@ -19,9 +25,9 @@
                 <div class="detail-row">
                     <strong>Address:</strong>
                     <span>
-                        {{ property.address }}, 
-                        {{ property.city }}, 
-                        {{ property.state }} 
+                        {{ property.address }},
+                        {{ property.city }},
+                        {{ property.state }}
                         {{ property.zip_code }}
                     </span>
                 </div>
@@ -88,11 +94,21 @@ const formatMoney = (cents) => (cents / 100).toFixed(2);
 const formatNumber = (num) => num.toLocaleString();
 const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric', 
-        year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
     });
+};
+
+const getStatusColor = (status) => {
+    const colors = {
+        available: '#10b981',
+        occupied: '#3b82f6',
+        maintenance: '#f59e0b',
+        unlisted: '#6b7280',
+    };
+    return colors[status] || '#6b7280';
 };
 </script>
 
@@ -146,5 +162,14 @@ h1 {
 .highlight {
     font-weight: 600;
     color: #2779bd;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
 }
 </style>

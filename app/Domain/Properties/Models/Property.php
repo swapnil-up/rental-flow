@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Domain\Bookings\Models\Booking;
 use Database\Factories\PropertyFactory;
+use Domain\Properties\States\PropertyStatus;
+use Domain\Properties\States\AvailablePropertyStatus;
+use Domain\Properties\States\OccupiedPropertyStatus;
+use Domain\Properties\States\MaintenancePropertyStatus;
+use Domain\Properties\States\UnlistedPropertyStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Property extends Model
 {
@@ -47,5 +53,26 @@ class Property extends Model
     protected static function newFactory()
     {
         return PropertyFactory::new();
+    }
+
+    public function statusState(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $stateClass = $this->getStatusClass();
+                return new $stateClass($this);
+            }
+        );
+    }
+
+    protected function getStatusClass(): string
+    {
+        return match($this->status) {
+            'available' => AvailablePropertyStatus::class,
+            'occupied' => OccupiedPropertyStatus::class,
+            'maintenance' => MaintenancePropertyStatus::class,
+            'unlisted' => UnlistedPropertyStatus::class,
+            default => AvailablePropertyStatus::class,
+        };
     }
 }

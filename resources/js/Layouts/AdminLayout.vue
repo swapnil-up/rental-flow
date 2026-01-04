@@ -2,6 +2,7 @@
     <div class="admin-layout">
         <nav class="nav">
             <Link href="/admin/properties">Properties</Link>
+            <Link href="/admin/bookings">Bookings</Link>
         </nav>
 
         <div v-if="$page.props.flash.success" class="success">
