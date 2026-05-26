@@ -11,6 +11,7 @@ use Domain\Bookings\DataTransferObjects\BookingData;
 use Domain\Bookings\Models\Booking;
 use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Models\Property;
+use Domain\Tenants\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,7 +21,7 @@ class BookingsController extends Controller
 {
     public function index(Request $request): Response
     {
-        $query = Booking::query()->with('property');
+        $query = Booking::query()->with('property', 'tenant');
 
         if ($status = $request->get('status')) {
             $query->where('status', $status);
@@ -45,6 +46,7 @@ class BookingsController extends Controller
                 'id' => $booking->id,
                 'property_id' => $booking->property_id,
                 'property_name' => $booking->property->name,
+                'tenant_name' => $booking->tenant?->name,
                 'check_in' => $booking->check_in->format('M d, Y'),
                 'check_out' => $booking->check_out->format('M d, Y'),
                 'status' => $booking->status->value,
@@ -57,6 +59,7 @@ class BookingsController extends Controller
             'filters' => $request->only(['status', 'property_id', 'from', 'to']),
             'statuses' => BookingStatus::cases(),
             'properties' => Property::select('id', 'name')->get(),
+            'tenants' => Tenant::select('id', 'name')->get(),
         ]);
     }
 
@@ -64,6 +67,7 @@ class BookingsController extends Controller
     {
         return Inertia::render('Admin/Bookings/Create', [
             'properties' => Property::select('id', 'name', 'city', 'state')->get(),
+            'tenants' => Tenant::select('id', 'name')->get(),
         ]);
     }
 
@@ -92,13 +96,15 @@ class BookingsController extends Controller
 
     public function show(Booking $booking): Response
     {
-        $booking->load('property');
+        $booking->load('property', 'tenant');
 
         return Inertia::render('Admin/Bookings/Show', [
             'booking' => [
                 'id' => $booking->id,
                 'property_name' => $booking->property->name,
                 'property_id' => $booking->property_id,
+                'tenant_name' => $booking->tenant?->name,
+                'tenant_id' => $booking->tenant_id,
                 'check_in' => $booking->check_in->format('M d, Y'),
                 'check_out' => $booking->check_out->format('M d, Y'),
                 'status' => $booking->status->value,

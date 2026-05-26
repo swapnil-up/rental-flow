@@ -28,6 +28,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Property</th>
+                    <th>Tenant</th>
                     <th>Check In</th>
                     <th>Check Out</th>
                     <th>Status</th>
@@ -41,6 +42,12 @@
                         <Link :href="`/admin/properties/${booking.property_id}`" class="link">
                             {{ booking.property_name }}
                         </Link>
+                    </td>
+                    <td>
+                        <Link v-if="booking.tenant_name" :href="`/admin/tenants/${booking.tenant_id}`" class="link">
+                            {{ booking.tenant_name }}
+                        </Link>
+                        <span v-else class="text-muted">—</span>
                     </td>
                     <td>{{ booking.check_in }}</td>
                     <td>{{ booking.check_out }}</td>
@@ -104,6 +111,7 @@ const props = defineProps({
     filters: Object,
     statuses: Array,
     properties: Array,
+    tenants: Array,
 });
 
 const filters = reactive({

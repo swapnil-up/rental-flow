@@ -15,6 +15,7 @@ class BookingRequest extends FormRequest
     {
         return [
             'property_id' => ['required', 'integer', 'exists:properties,id'],
+            'tenant_id' => ['nullable', 'integer', 'exists:tenants,id'],
             'check_in' => ['required', 'date', 'after_or_equal:today'],
             'check_out' => ['required', 'date', 'after:check_in'],
         ];

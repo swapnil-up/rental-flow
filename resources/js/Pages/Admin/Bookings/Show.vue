@@ -14,7 +14,12 @@
             <div class="details-grid">
                 <div class="detail-row">
                     <strong>Property:</strong>
-                    <span>{{ booking.property_name }}</span>
+                    <Link :href="`/admin/properties/${booking.property_id}`" class="link">{{ booking.property_name }}</Link>
+                </div>
+                <div class="detail-row">
+                    <strong>Tenant:</strong>
+                    <Link v-if="booking.tenant_name" :href="`/admin/tenants/${booking.tenant_id}`" class="link">{{ booking.tenant_name }}</Link>
+                    <span v-else>—</span>
                 </div>
                 <div class="detail-row">
                     <strong>Check-In:</strong>

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Domain\Bookings\Models\Booking;
 use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Models\Property;
+use Domain\Tenants\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BookingFactory extends Factory
@@ -13,13 +14,11 @@ class BookingFactory extends Factory
 
     public function definition(): array
     {
-        $checkIn = fake()->dateTimeBetween('now', '+1 month');
-        $checkOut = fake()->dateTimeBetween($checkIn, '+2 months');
-
         return [
             'property_id' => Property::factory(),
-            'check_in' => $checkIn,
-            'check_out' => $checkOut,
+            'tenant_id' => Tenant::factory(),
+            'check_in' => now()->addDays(rand(1, 30)),
+            'check_out' => now()->addDays(rand(31, 60)),
             'status' => BookingStatus::Pending,
         ];
     }

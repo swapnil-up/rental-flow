@@ -5,6 +5,7 @@ namespace Domain\Bookings\Models;
 use Domain\Bookings\States\BookingState;
 use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Models\Property;
+use Domain\Tenants\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ class Booking extends Model
 
     protected $fillable = [
         'property_id',
+        'tenant_id',
         'check_in',
         'check_out',
         'status',
@@ -43,6 +45,11 @@ class Booking extends Model
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
     }
 
     protected static function newFactory()

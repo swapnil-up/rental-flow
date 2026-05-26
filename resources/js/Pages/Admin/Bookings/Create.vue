@@ -17,6 +17,17 @@
                 <div v-if="form.errors.property_id" class="error">{{ form.errors.property_id }}</div>
             </div>
 
+            <div class="form-group">
+                <label>Tenant (optional)</label>
+                <select v-model="form.tenant_id" :class="{ 'has-error': form.errors.tenant_id }">
+                    <option value="">No tenant assigned</option>
+                    <option v-for="tenant in tenants" :key="tenant.id" :value="tenant.id">
+                        {{ tenant.name }}
+                    </option>
+                </select>
+                <div v-if="form.errors.tenant_id" class="error">{{ form.errors.tenant_id }}</div>
+            </div>
+
             <div class="form-row">
                 <div class="form-group">
                     <label>Check-In Date</label>
@@ -57,10 +68,12 @@ import { Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
     properties: Array,
+    tenants: Array,
 });
 
 const form = useForm({
     property_id: '',
+    tenant_id: '',
     check_in: '',
     check_out: '',
 });

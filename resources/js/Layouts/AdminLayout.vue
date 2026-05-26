@@ -3,6 +3,7 @@
         <nav class="nav">
             <Link href="/admin/properties">Properties</Link>
             <Link href="/admin/bookings">Bookings</Link>
+            <Link href="/admin/tenants">Tenants</Link>
         </nav>
 
         <div v-if="$page.props.flash.success" class="success">

@@ -39,6 +39,7 @@ class CreateBookingAction
             'check_in' => $checkIn,
             'check_out' => $checkOut,
             'status' => BookingStatus::Pending,
+            'tenant_id' => request('tenant_id'),
         ]);
 
         Log::info('Booking created', [
