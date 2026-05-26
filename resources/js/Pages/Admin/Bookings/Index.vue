@@ -2,10 +2,25 @@
     <AdminLayout>
         <div class="header">
             <h1>Bookings</h1>
+            <Link href="/admin/bookings/create" class="btn">Create Booking</Link>
+        </div>
+
+        <div class="filters">
+            <select v-model="filters.status" @change="applyFilters">
+                <option value="">All Statuses</option>
+                <option v-for="s in statuses" :key="s" :value="s">{{ capitalize(s) }}</option>
+            </select>
+            <select v-model="filters.property_id" @change="applyFilters">
+                <option value="">All Properties</option>
+                <option v-for="p in properties" :key="p.id" :value="p.id">{{ p.name }}</option>
+            </select>
+            <input v-model="filters.from" type="date" placeholder="From" @input="applyFilters" />
+            <input v-model="filters.to" type="date" placeholder="To" @input="applyFilters" />
+            <button @click="clearFilters" class="btn-clear">Clear</button>
         </div>
 
         <div v-if="bookings.data.length === 0" class="empty-state">
-            <p>No bookings yet.</p>
+            <p>No bookings found.</p>
         </div>
 
         <table v-else class="table">
@@ -22,7 +37,11 @@
             <tbody>
                 <tr v-for="booking in bookings.data" :key="booking.id">
                     <td>#{{ booking.id }}</td>
-                    <td>{{ booking.property_name }}</td>
+                    <td>
+                        <Link :href="`/admin/properties/${booking.property_id}`" class="link">
+                            {{ booking.property_name }}
+                        </Link>
+                    </td>
                     <td>{{ booking.check_in }}</td>
                     <td>{{ booking.check_out }}</td>
                     <td>
@@ -35,6 +54,7 @@
                     </td>
                     <td>
                         <div class="action-buttons">
+                            <Link :href="`/admin/bookings/${booking.id}`" class="link">View</Link>
                             <button
                                 v-if="booking.available_actions.includes('confirm')"
                                 @click="confirmBooking(booking.id)"
@@ -54,7 +74,7 @@
                             </button>
                             
                             <span v-if="booking.available_actions.length === 0" class="text-muted">
-                                No actions available
+                                No actions
                             </span>
                         </div>
                     </td>
@@ -77,10 +97,20 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
-defineProps({
+const props = defineProps({
     bookings: Object,
+    filters: Object,
+    statuses: Array,
+    properties: Array,
+});
+
+const filters = reactive({
+    status: props.filters?.status || '',
+    property_id: props.filters?.property_id || '',
+    from: props.filters?.from || '',
+    to: props.filters?.to || '',
 });
 
 const processing = ref(false);
@@ -96,6 +126,15 @@ const getBadgeColor = (color) => {
         red: '#ef4444',
     };
     return colors[color] || '#6b7280';
+};
+
+const applyFilters = () => {
+    router.get('/admin/bookings', filters, { preserveState: true, replace: true });
+};
+
+const clearFilters = () => {
+    Object.assign(filters, { status: '', property_id: '', from: '', to: '' });
+    router.get('/admin/bookings', {}, { preserveState: true, replace: true });
 };
 
 const confirmBooking = (bookingId) => {
@@ -239,5 +278,59 @@ h1 {
 .pagination a.disabled {
     opacity: 0.5;
     pointer-events: none;
+}
+
+.btn {
+    padding: 8px 16px;
+    background: #3490dc;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: #2779bd;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-clear {
+    padding: 8px 12px;
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-clear:hover {
+    background: #4b5563;
+}
+
+.link {
+    color: #3490dc;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
 }
 </style>

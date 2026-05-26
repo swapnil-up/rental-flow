@@ -7,8 +7,33 @@
             </Link>
         </div>
 
+        <div class="filters">
+            <input v-model="filters.city" placeholder="City" @input="applyFilters" />
+            <select v-model="filters.type" @change="applyFilters">
+                <option value="">All Types</option>
+                <option value="apartment">Apartment</option>
+                <option value="house">House</option>
+                <option value="condo">Condo</option>
+                <option value="studio">Studio</option>
+            </select>
+            <select v-model="filters.status" @change="applyFilters">
+                <option value="">All Statuses</option>
+                <option v-for="s in statuses" :key="s" :value="s">{{ capitalize(s) }}</option>
+            </select>
+            <select v-model="filters.bedrooms" @change="applyFilters">
+                <option value="">Any Bedrooms</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+            </select>
+            <input v-model="filters.min_price" type="number" placeholder="Min Price ($)" @input="applyFilters" />
+            <input v-model="filters.max_price" type="number" placeholder="Max Price ($)" @input="applyFilters" />
+            <button @click="clearFilters" class="btn-clear">Clear</button>
+        </div>
+
         <div v-if="properties.data.length === 0" class="empty-state">
-            <p>No properties yet. 
+            <p>No properties found.
                 <Link href="/admin/properties/create">Create one!</Link>
             </p>
         </div>
@@ -33,13 +58,10 @@
                     <td>{{ property.bedrooms }}</td>
                     <td>${{ formatMoney(property.total_monthly_cost) }}</td>
                     <td>{{ capitalize(property.status) }}</td>
-                    <td>
-                        <Link 
-                            :href="`/admin/properties/${property.id}`"
-                            class="link"
-                        >
-                            View
-                        </Link>
+                    <td class="actions-cell">
+                        <Link :href="`/admin/properties/${property.id}`" class="link">View</Link>
+                        <Link :href="`/admin/properties/${property.id}/edit`" class="link">Edit</Link>
+                        <button @click="destroy(property.id)" class="link link-danger">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -59,14 +81,40 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import { reactive } from 'vue';
 
-defineProps({
+const props = defineProps({
     properties: Object,
+    filters: Object,
+    statuses: Array,
+});
+
+const filters = reactive({
+    city: props.filters?.city || '',
+    type: props.filters?.type || '',
+    status: props.filters?.status || '',
+    bedrooms: props.filters?.bedrooms || '',
+    min_price: props.filters?.min_price || '',
+    max_price: props.filters?.max_price || '',
 });
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 const formatMoney = (cents) => (cents / 100).toFixed(2);
+
+const destroy = (id) => {
+    if (!confirm('Are you sure you want to delete this property?')) return;
+    router.delete(`/admin/properties/${id}`);
+};
+
+const applyFilters = () => {
+    router.get('/admin/properties', filters, { preserveState: true, replace: true });
+};
+
+const clearFilters = () => {
+    Object.assign(filters, { city: '', type: '', status: '', bedrooms: '', min_price: '', max_price: '' });
+    router.get('/admin/properties', {}, { preserveState: true, replace: true });
+};
 </script>
 
 <style scoped>
@@ -75,6 +123,35 @@ const formatMoney = (cents) => (cents / 100).toFixed(2);
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-clear {
+    padding: 8px 12px;
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-clear:hover {
+    background: #4b5563;
 }
 
 h1 {
@@ -151,5 +228,24 @@ h1 {
 .pagination a.disabled {
     opacity: 0.5;
     pointer-events: none;
+}
+
+.actions-cell {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.link-danger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.link-danger:hover {
+    color: #e3342f;
 }
 </style>

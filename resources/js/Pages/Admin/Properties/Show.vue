@@ -2,9 +2,11 @@
     <AdminLayout>
         <div class="header">
             <h1>{{ property.name }}</h1>
-            <Link href="/admin/properties" class="back-link">
-                Back to List
-            </Link>
+            <div class="header-actions">
+                <Link :href="`/admin/properties/${property.id}/edit`" class="btn">Edit</Link>
+                <button @click="destroy" class="btn btn-danger">Delete</button>
+                <Link href="/admin/properties" class="back-link">Back to List</Link>
+            </div>
         </div>
 
         <div class="details-card">
@@ -83,9 +85,9 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 
-defineProps({
+const props = defineProps({
     property: Object,
 });
 
@@ -99,6 +101,11 @@ const formatDate = (dateStr) => {
         day: 'numeric',
         year: 'numeric'
     });
+};
+
+const destroy = () => {
+    if (!confirm('Are you sure you want to delete this property?')) return;
+    router.delete(`/admin/properties/${props.property.id}`);
 };
 
 const getStatusColor = (status) => {
@@ -122,6 +129,36 @@ const getStatusColor = (status) => {
 
 h1 {
     margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn {
+    padding: 8px 16px;
+    background: #3490dc;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: #2779bd;
+}
+
+.btn-danger {
+    background: #e3342f;
+}
+
+.btn-danger:hover {
+    background: #cc1f1a;
 }
 
 .back-link {

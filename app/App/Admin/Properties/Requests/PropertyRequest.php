@@ -26,7 +26,7 @@ class PropertyRequest extends FormRequest
             'monthly_rent' => ['required', 'numeric', 'min:0'],
             'utilities_cost' => ['sometimes', 'numeric', 'min:0'],
             'management_fee' => ['sometimes', 'numeric', 'min:0'],
-            'status' => ['sometimes', 'string', 'in:available,occupied,maintenance'],
+            'status' => ['sometimes', 'string', 'in:available,occupied,maintenance,unlisted'],
         ];
     }
 }
