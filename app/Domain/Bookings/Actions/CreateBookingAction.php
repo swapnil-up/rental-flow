@@ -4,6 +4,7 @@ namespace Domain\Bookings\Actions;
 
 use Carbon\Carbon;
 use Domain\Bookings\Models\Booking;
+use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Actions\CheckPropertyAvailabilityAction;
 use Domain\Properties\Models\Property;
 use Illuminate\Support\Facades\Log;
@@ -37,7 +38,7 @@ class CreateBookingAction
             'property_id' => $property->id,
             'check_in' => $checkIn,
             'check_out' => $checkOut,
-            'status' => 'pending',
+            'status' => BookingStatus::Pending,
         ]);
 
         Log::info('Booking created', [

@@ -3,6 +3,7 @@
 namespace Domain\Bookings\Transitions;
 
 use Domain\Bookings\Models\Booking;
+use Domain\Bookings\States\BookingStatus;
 use Illuminate\Support\Facades\Log;
 
 class ConfirmBookingTransition extends BookingTransition
@@ -11,7 +12,7 @@ class ConfirmBookingTransition extends BookingTransition
     {
         $this->validate($booking);
 
-        $booking->status = 'confirmed';
+        $booking->status = BookingStatus::Confirmed;
         $booking->save();
 
         $this->afterTransition($booking);
@@ -21,9 +22,9 @@ class ConfirmBookingTransition extends BookingTransition
 
     protected function validate(Booking $booking): void
     {
-        if (!$booking->state->canBeConfirmed()) {
+        if (!$booking->status->canBeConfirmed()) {
             throw new \DomainException(
-                "Cannot confirm booking in {$booking->status} state"
+                "Cannot confirm booking in {$booking->status->value} state"
             );
         }
 

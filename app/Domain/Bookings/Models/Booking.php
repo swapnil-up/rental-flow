@@ -3,11 +3,7 @@
 namespace Domain\Bookings\Models;
 
 use Domain\Bookings\States\BookingState;
-use Domain\Bookings\States\PendingBookingState;
-use Domain\Bookings\States\ConfirmedBookingState;
-use Domain\Bookings\States\ActiveBookingState;
-use Domain\Bookings\States\CompletedBookingState;
-use Domain\Bookings\States\CancelledBookingState;
+use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Models\Property;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,37 +24,20 @@ class Booking extends Model
         'status',
     ];
 
-    protected $casts = [
-        'check_in' => 'date',
-        'check_out' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'check_in' => 'date',
+            'check_out' => 'date',
+            'status' => BookingStatus::class,
+        ];
+    }
 
-    /**
-     * Get the booking state object
-     */
     public function state(): Attribute
     {
         return Attribute::make(
-            get: function () {
-                $stateClass = $this->getStateClass();
-                return new $stateClass($this);
-            }
+            get: fn(): BookingState => $this->status->resolveState($this),
         );
-    }
-
-    /**
-     * Get the state class based on status
-     */
-    protected function getStateClass(): string
-    {
-        return match($this->status) {
-            'pending' => PendingBookingState::class,
-            'confirmed' => ConfirmedBookingState::class,
-            'active' => ActiveBookingState::class,
-            'completed' => CompletedBookingState::class,
-            'cancelled' => CancelledBookingState::class,
-            default => PendingBookingState::class,
-        };
     }
 
     public function property(): BelongsTo
@@ -70,7 +49,6 @@ class Booking extends Model
     {
         return BookingFactory::new();
     }
-
 
     public function newEloquentBuilder($query): BookingQueryBuilder
     {

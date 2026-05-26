@@ -3,6 +3,7 @@
 namespace Domain\Bookings\QueryBuilders;
 
 use Carbon\Carbon;
+use Domain\Bookings\States\BookingStatus;
 use Illuminate\Database\Eloquent\Builder;
 
 class BookingQueryBuilder extends Builder
@@ -12,23 +13,17 @@ class BookingQueryBuilder extends Builder
      */
     public function whereConfirmed(): self
     {
-        return $this->where('status', 'confirmed');
+        return $this->where('status', BookingStatus::Confirmed);
     }
 
-    /**
-     * Get only active bookings
-     */
     public function whereActive(): self
     {
-        return $this->where('status', 'active');
+        return $this->where('status', BookingStatus::Active);
     }
 
-    /**
-     * Get bookings that can be cancelled
-     */
     public function whereCancellable(): self
     {
-        return $this->whereIn('status', ['pending', 'confirmed'])
+        return $this->whereIn('status', [BookingStatus::Pending, BookingStatus::Confirmed])
             ->where('check_in', '>', now());
     }
 

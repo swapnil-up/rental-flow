@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Domain\Properties\Models\Property;
+use Domain\Properties\States\PropertyStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PropertyFactory extends Factory
@@ -25,7 +26,7 @@ class PropertyFactory extends Factory
             'utilities_cost' => fake()->numberBetween(5000, 30000), // 50-300 in paisa
             'management_fee' => fake()->numberBetween(5000, 20000), // 50-200 in paisa
             'total_monthly_cost' => 0, // Will be calculated
-            'status' => 'available',
+            'status' => PropertyStatus::Available,
         ];
     }
 }

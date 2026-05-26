@@ -3,6 +3,7 @@
 namespace Domain\Bookings\Transitions;
 
 use Domain\Bookings\Models\Booking;
+use Domain\Bookings\States\BookingStatus;
 use Illuminate\Support\Facades\Log;
 
 class CancelBookingTransition extends BookingTransition
@@ -11,7 +12,7 @@ class CancelBookingTransition extends BookingTransition
     {
         $this->validate($booking);
 
-        $booking->status = 'cancelled';
+        $booking->status = BookingStatus::Cancelled;
         $booking->save();
 
         $this->afterTransition($booking);
@@ -21,9 +22,9 @@ class CancelBookingTransition extends BookingTransition
 
     protected function validate(Booking $booking): void
     {
-        if (!$booking->state->canBeCancelled()) {
+        if (!$booking->status->canBeCancelled()) {
             throw new \DomainException(
-                "Cannot cancel booking in {$booking->status} state"
+                "Cannot cancel booking in {$booking->status->value} state"
             );
         }
     }

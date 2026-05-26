@@ -4,11 +4,6 @@ namespace Domain\Bookings\States;
 
 class ActiveBookingState extends BookingState
 {
-    public static function value(): string
-    {
-        return 'active';
-    }
-
     public function color(): string
     {
         return 'green';
@@ -16,7 +11,7 @@ class ActiveBookingState extends BookingState
 
     public function canBeCancelled(): bool
     {
-        return false; // Cannot cancel once checked in
+        return false;
     }
 
     public function canBeConfirmed(): bool
@@ -26,6 +21,6 @@ class ActiveBookingState extends BookingState
 
     public function canBeModified(): bool
     {
-        return false; // Cannot modify during stay
+        return false;
     }
 }

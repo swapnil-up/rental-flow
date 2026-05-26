@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Domain\Bookings\Models\Booking;
+use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,21 +20,21 @@ class BookingFactory extends Factory
             'property_id' => Property::factory(),
             'check_in' => $checkIn,
             'check_out' => $checkOut,
-            'status' => 'pending',
+            'status' => BookingStatus::Pending,
         ];
     }
 
     public function confirmed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'confirmed',
+            'status' => BookingStatus::Confirmed,
         ]);
     }
 
     public function cancelled(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'cancelled',
+            'status' => BookingStatus::Cancelled,
         ]);
     }
 }

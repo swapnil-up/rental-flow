@@ -23,8 +23,8 @@ class BookingsController extends Controller
                 'property_name' => $booking->property->name,
                 'check_in' => $booking->check_in->format('M d, Y'),
                 'check_out' => $booking->check_out->format('M d, Y'),
-                'status' => $booking->status,
-                'status_color' => $booking->state->color(),
+                'status' => $booking->status->value,
+                'status_color' => $booking->status->color(),
                 'available_actions' => $booking->state->availableActions(),
             ]);
 

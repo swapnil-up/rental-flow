@@ -2,13 +2,8 @@
 
 namespace Domain\Properties\States;
 
-class OccupiedPropertyStatus extends PropertyStatus
+class OccupiedPropertyStatus extends PropertyState
 {
-    public static function value(): string
-    {
-        return 'occupied';
-    }
-
     public function color(): string
     {
         return 'blue';

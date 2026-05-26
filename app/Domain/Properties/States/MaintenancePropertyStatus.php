@@ -2,16 +2,11 @@
 
 namespace Domain\Properties\States;
 
-class MaintenancePropertyStatus extends PropertyStatus
+class MaintenancePropertyStatus extends PropertyState
 {
-    public static function value(): string
-    {
-        return 'maintenance';
-    }
-
     public function color(): string
     {
-        return 'orange';
+        return 'yellow';
     }
 
     public function canAcceptBookings(): bool

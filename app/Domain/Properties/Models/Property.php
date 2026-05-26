@@ -8,10 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Domain\Bookings\Models\Booking;
 use Database\Factories\PropertyFactory;
 use Domain\Properties\States\PropertyStatus;
-use Domain\Properties\States\AvailablePropertyStatus;
-use Domain\Properties\States\OccupiedPropertyStatus;
-use Domain\Properties\States\MaintenancePropertyStatus;
-use Domain\Properties\States\UnlistedPropertyStatus;
+use Domain\Properties\States\PropertyState;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Property extends Model
@@ -35,15 +32,19 @@ class Property extends Model
         'status',
     ];
 
-    protected $casts = [
-        'monthly_rent' => 'integer', 
-        'utilities_cost' => 'integer',
-        'management_fee' => 'integer',
-        'total_monthly_cost' => 'integer',
-        'bedrooms' => 'integer',
-        'bathrooms' => 'decimal:1',
-        'square_feet' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'monthly_rent' => 'integer',
+            'utilities_cost' => 'integer',
+            'management_fee' => 'integer',
+            'total_monthly_cost' => 'integer',
+            'bedrooms' => 'integer',
+            'bathrooms' => 'decimal:1',
+            'square_feet' => 'integer',
+            'status' => PropertyStatus::class,
+        ];
+    }
 
     public function bookings(): HasMany
     {
@@ -58,21 +59,7 @@ class Property extends Model
     public function statusState(): Attribute
     {
         return Attribute::make(
-            get: function () {
-                $stateClass = $this->getStatusClass();
-                return new $stateClass($this);
-            }
+            get: fn(): PropertyState => $this->status->resolveState($this),
         );
-    }
-
-    protected function getStatusClass(): string
-    {
-        return match($this->status) {
-            'available' => AvailablePropertyStatus::class,
-            'occupied' => OccupiedPropertyStatus::class,
-            'maintenance' => MaintenancePropertyStatus::class,
-            'unlisted' => UnlistedPropertyStatus::class,
-            default => AvailablePropertyStatus::class,
-        };
     }
 }

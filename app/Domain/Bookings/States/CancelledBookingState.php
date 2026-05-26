@@ -4,11 +4,6 @@ namespace Domain\Bookings\States;
 
 class CancelledBookingState extends BookingState
 {
-    public static function value(): string
-    {
-        return 'cancelled';
-    }
-
     public function color(): string
     {
         return 'red';
@@ -16,7 +11,7 @@ class CancelledBookingState extends BookingState
 
     public function canBeCancelled(): bool
     {
-        return false; // Already cancelled
+        return false;
     }
 
     public function canBeConfirmed(): bool

@@ -3,6 +3,7 @@
 namespace Domain\Bookings\Collections;
 
 use Domain\Bookings\Models\Booking;
+use Domain\Bookings\States\BookingStatus;
 use Illuminate\Database\Eloquent\Collection;
 
 class BookingCollection extends Collection
@@ -12,8 +13,8 @@ class BookingCollection extends Collection
      */
     public function confirmed(): self
     {
-        return $this->filter(fn (Booking $booking) => 
-            $booking->status === 'confirmed'
+        return $this->filter(fn (Booking $booking) =>
+            $booking->status === BookingStatus::Confirmed
         );
     }
 

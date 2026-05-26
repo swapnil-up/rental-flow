@@ -2,13 +2,8 @@
 
 namespace Domain\Properties\States;
 
-class AvailablePropertyStatus extends PropertyStatus
+class AvailablePropertyStatus extends PropertyState
 {
-    public static function value(): string
-    {
-        return 'available';
-    }
-
     public function color(): string
     {
         return 'green';

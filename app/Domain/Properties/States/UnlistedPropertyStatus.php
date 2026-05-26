@@ -2,13 +2,8 @@
 
 namespace Domain\Properties\States;
 
-class UnlistedPropertyStatus extends PropertyStatus
+class UnlistedPropertyStatus extends PropertyState
 {
-    public static function value(): string
-    {
-        return 'unlisted';
-    }
-
     public function color(): string
     {
         return 'gray';

@@ -4,7 +4,9 @@ namespace Domain\Properties\Actions;
 
 use Carbon\Carbon;
 use Domain\Bookings\Models\Booking;
+use Domain\Bookings\States\BookingStatus;
 use Domain\Properties\Models\Property;
+use Domain\Properties\States\PropertyStatus;
 
 class CheckPropertyAvailabilityAction
 {
@@ -13,15 +15,13 @@ class CheckPropertyAvailabilityAction
         Carbon $checkIn,
         Carbon $checkOut
     ): bool {
-        // Property must be available status
-        if ($property->status !== 'available') {
+        if ($property->status !== PropertyStatus::Available) {
             return false;
         }
 
-        // Check for overlapping bookings
         $hasOverlap = Booking::query()
             ->where('property_id', $property->id)
-            ->whereIn('status', ['confirmed', 'active'])
+            ->whereIn('status', [BookingStatus::Confirmed, BookingStatus::Active])
             ->where(function ($query) use ($checkIn, $checkOut) {
                 // Check in falls within existing booking
                 $query->whereBetween('check_in', [$checkIn, $checkOut])

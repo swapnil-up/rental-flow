@@ -2,9 +2,9 @@
 
 namespace Domain\Properties\DataTransferObjects;
 
-use Support\DataTransferObjects\DataTransferObject;
+use Domain\Properties\States\PropertyStatus;
 
-class PropertyData extends DataTransferObject
+readonly class PropertyData
 {
     public function __construct(
         public string $name,
@@ -16,10 +16,10 @@ class PropertyData extends DataTransferObject
         public int $bedrooms,
         public float $bathrooms,
         public int $square_feet,
-        public int $monthly_rent, // In paisa
-        public int $utilities_cost = 0, // In paisa
+        public int $monthly_rent,
+        public int $utilities_cost = 0,
         public int $management_fee = 0,
-        public string $status = 'available',
+        public PropertyStatus $status = PropertyStatus::Available,
     ) {}
 
     public static function fromRequest(array $data): self
@@ -35,13 +35,34 @@ class PropertyData extends DataTransferObject
             bathrooms: (float) $data['bathrooms'],
             square_feet: (int) $data['square_feet'],
             monthly_rent: (int) ($data['monthly_rent'] * 100),
-            utilities_cost: isset($data['utilities_cost']) 
-                ? (int) ($data['utilities_cost'] * 100) 
+            utilities_cost: isset($data['utilities_cost'])
+                ? (int) ($data['utilities_cost'] * 100)
                 : 0,
-            management_fee: isset($data['management_fee']) 
-                ? (int) ($data['management_fee'] * 100) 
+            management_fee: isset($data['management_fee'])
+                ? (int) ($data['management_fee'] * 100)
                 : 0,
-            status: $data['status'] ?? 'available',
+            status: isset($data['status'])
+                ? PropertyStatus::from($data['status'])
+                : PropertyStatus::Available,
         );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'type' => $this->type,
+            'address' => $this->address,
+            'city' => $this->city,
+            'state' => $this->state,
+            'zip_code' => $this->zip_code,
+            'bedrooms' => $this->bedrooms,
+            'bathrooms' => $this->bathrooms,
+            'square_feet' => $this->square_feet,
+            'monthly_rent' => $this->monthly_rent,
+            'utilities_cost' => $this->utilities_cost,
+            'management_fee' => $this->management_fee,
+            'status' => $this->status->value,
+        ];
     }
 }
