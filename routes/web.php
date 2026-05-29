@@ -1,12 +1,14 @@
 <?php
 
 use App\Admin\Bookings\Controllers\BookingsController;
+use App\Admin\Maintenance\Controllers\MaintenanceRequestsController;
 use App\Admin\Properties\Controllers\PropertiesController;
 use App\Admin\Tenants\Controllers\TenantsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Tenant\DashboardController;
+use App\Http\Controllers\Tenant\MaintenanceController;
 use Illuminate\Support\Facades\Route;
 
 // Guest routes
@@ -31,11 +33,20 @@ Route::middleware('auth')->group(function () {
         Route::post('bookings/{booking}/cancel', [BookingsController::class, 'cancel'])
             ->name('bookings.cancel');
         Route::resource('tenants', TenantsController::class);
+        Route::get('maintenance', [MaintenanceRequestsController::class, 'index'])
+            ->name('maintenance.index');
+        Route::get('maintenance/{maintenanceRequest}', [MaintenanceRequestsController::class, 'show'])
+            ->name('maintenance.show');
+        Route::post('maintenance/{maintenanceRequest}/transition', [MaintenanceRequestsController::class, 'transition'])
+            ->name('maintenance.transition');
     });
 
     // Tenant routes
     Route::middleware('tenant')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
+        Route::get('maintenance/create', [MaintenanceController::class, 'create'])->name('maintenance.create');
+        Route::post('maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
     });
 });
 
