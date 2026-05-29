@@ -4,6 +4,9 @@
             <Link href="/admin/properties">Properties</Link>
             <Link href="/admin/bookings">Bookings</Link>
             <Link href="/admin/tenants">Tenants</Link>
+            <span class="nav-spacer"></span>
+            <span class="user-info">{{ $page.props.auth.user?.name }}</span>
+            <Link href="/logout" method="post" as="button" class="btn-logout">Logout</Link>
         </nav>
 
         <div v-if="$page.props.flash.success" class="success">
@@ -38,15 +41,13 @@ import { Link } from '@inertiajs/vue3';
     border-bottom: 2px solid #ddd;
 }
 
-.nav a {
-    margin-right: 15px;
-    color: #3490dc;
-    text-decoration: none;
-}
-
-.nav a:hover {
-    text-decoration: underline;
-}
+.nav { display: flex; align-items: center; gap: 15px; }
+.nav a { color: #3490dc; text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+.nav-spacer { flex: 1; }
+.user-info { font-size: 14px; color: #6b7280; }
+.btn-logout { background: none; border: none; cursor: pointer; color: #e3342f; font-size: 14px; font-family: inherit; padding: 0; }
+.btn-logout:hover { text-decoration: underline; }
 
 .success {
     padding: 12px;

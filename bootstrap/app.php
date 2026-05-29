@@ -1,9 +1,11 @@
 <?php
 
 use App\Application;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsTenant;
+use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\HandleInertiaRequests;
 
 return Application::configure(basePath: $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__))
     ->withRouting(
@@ -13,6 +15,11 @@ return Application::configure(basePath: $_ENV['APP_BASE_PATH'] ?? dirname(__DIR_
     )
     ->withMiddleware(function (Middleware $middleware): void {
          $middleware->web(append: [HandleInertiaRequests::class,]);
+
+         $middleware->alias([
+             'admin' => EnsureUserIsAdmin::class,
+             'tenant' => EnsureUserIsTenant::class,
+         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

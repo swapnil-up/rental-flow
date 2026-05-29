@@ -10,6 +10,12 @@ class TenantCrudTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->actingAs(\App\Models\User::factory()->admin()->create());
+    }
+
     public function test_it_can_list_tenants(): void
     {
         Tenant::factory()->count(3)->create();

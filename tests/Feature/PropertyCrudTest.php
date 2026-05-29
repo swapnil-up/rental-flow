@@ -11,6 +11,12 @@ class PropertyCrudTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->actingAs(\App\Models\User::factory()->admin()->create());
+    }
+
     public function test_it_can_list_properties(): void
     {
         Property::factory()->count(3)->create();

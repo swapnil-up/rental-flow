@@ -14,6 +14,12 @@ class BookingCrudTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->actingAs(\App\Models\User::factory()->admin()->create());
+    }
+
     public function test_it_can_list_bookings(): void
     {
         Booking::factory()->count(3)->create();
