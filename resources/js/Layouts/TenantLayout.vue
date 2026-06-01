@@ -5,6 +5,7 @@
             <div class="nav-links">
                 <Link href="/dashboard">My Bookings</Link>
                 <Link href="/maintenance">Maintenance</Link>
+                <Link href="/payments">Payments</Link>
                 <Link href="/logout" method="post" as="button" class="btn-logout">Logout</Link>
             </div>
         </nav>

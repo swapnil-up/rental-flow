@@ -5,6 +5,7 @@
             <Link href="/admin/bookings">Bookings</Link>
             <Link href="/admin/tenants">Tenants</Link>
             <Link href="/admin/maintenance">Maintenance</Link>
+            <Link href="/admin/payments">Payments</Link>
             <span class="nav-spacer"></span>
             <span class="user-info">{{ $page.props.auth.user?.name }}</span>
             <Link href="/logout" method="post" as="button" class="btn-logout">Logout</Link>
