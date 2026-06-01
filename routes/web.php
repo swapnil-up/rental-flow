@@ -1,6 +1,7 @@
 <?php
 
 use App\Admin\Bookings\Controllers\BookingsController;
+use App\Admin\Dashboard\Controllers\DashboardController as AdminDashboardController;
 use App\Admin\Maintenance\Controllers\MaintenanceRequestsController;
 use App\Admin\Payments\Controllers\PaymentsController;
 use App\Admin\Properties\Controllers\PropertiesController;
@@ -8,7 +9,7 @@ use App\Admin\Tenants\Controllers\TenantsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Tenant\DashboardController;
+use App\Http\Controllers\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Tenant\MaintenanceController;
 use App\Http\Controllers\Tenant\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,8 @@ Route::middleware('auth')->group(function () {
 
     // Admin routes
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::redirect('/', '/admin/properties');
+        Route::redirect('/', '/admin/dashboard');
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::resource('properties', PropertiesController::class);
         Route::resource('bookings', BookingsController::class);
         Route::post('bookings/{booking}/confirm', [BookingsController::class, 'confirm'])
@@ -49,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
     // Tenant routes
     Route::middleware('tenant')->group(function () {
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [TenantDashboardController::class, 'index'])->name('dashboard');
         Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
         Route::get('maintenance/create', [MaintenanceController::class, 'create'])->name('maintenance.create');
         Route::post('maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
@@ -60,7 +62,7 @@ Route::middleware('auth')->group(function () {
 // Fallback for logged-in users hitting /login or /register
 Route::get('/', function () {
     if (auth()->check()) {
-        return auth()->user()->isAdmin() ? redirect('/admin/properties') : redirect('/dashboard');
+        return auth()->user()->isAdmin() ? redirect('/admin/dashboard') : redirect('/dashboard');
     }
     return redirect('/login');
 });
