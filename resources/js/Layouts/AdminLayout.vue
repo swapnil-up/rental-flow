@@ -2,6 +2,7 @@
     <div class="admin-layout">
         <nav class="nav">
             <Link href="/admin/dashboard">Dashboard</Link>
+            <Link href="/admin/calendar">Calendar</Link>
             <Link href="/admin/properties">Properties</Link>
             <Link href="/admin/bookings">Bookings</Link>
             <Link href="/admin/tenants">Tenants</Link>

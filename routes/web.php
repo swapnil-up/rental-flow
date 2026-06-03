@@ -1,6 +1,7 @@
 <?php
 
 use App\Admin\Bookings\Controllers\BookingsController;
+use App\Admin\Calendar\Controllers\CalendarController;
 use App\Admin\Dashboard\Controllers\DashboardController as AdminDashboardController;
 use App\Admin\Maintenance\Controllers\MaintenanceRequestsController;
 use App\Admin\Payments\Controllers\PaymentsController;
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::redirect('/', '/admin/dashboard');
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('calendar', [CalendarController::class, 'index'])->name('calendar');
         Route::resource('properties', PropertiesController::class);
         Route::resource('bookings', BookingsController::class);
         Route::post('bookings/{booking}/confirm', [BookingsController::class, 'confirm'])
