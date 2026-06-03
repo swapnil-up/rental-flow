@@ -46,6 +46,15 @@ class Property extends Model
         ];
     }
 
+    public function scopeSearch($query, string $term): void
+    {
+        $query->where(function ($q) use ($term) {
+            $q->where('name', 'like', "%{$term}%")
+              ->orWhere('city', 'like', "%{$term}%")
+              ->orWhere('address', 'like', "%{$term}%");
+        });
+    }
+
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);

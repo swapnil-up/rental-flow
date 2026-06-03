@@ -143,4 +143,61 @@ class PropertyCrudTest extends TestCase
             ->has('properties.data', 1)
         );
     }
+
+    public function test_it_can_search_properties_by_name(): void
+    {
+        Property::factory()->create(['name' => 'Ocean View Apartment']);
+        Property::factory()->create(['name' => 'Downtown Loft']);
+
+        $response = $this->get('/admin/properties?search=Ocean');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('Admin/Properties/Index')
+            ->has('properties.data', 1)
+            ->where('properties.data.0.name', 'Ocean View Apartment')
+        );
+    }
+
+    public function test_it_can_search_properties_by_city(): void
+    {
+        Property::factory()->create(['name' => 'Place A', 'city' => 'Miami']);
+        Property::factory()->create(['name' => 'Place B', 'city' => 'Orlando']);
+
+        $response = $this->get('/admin/properties?search=Miami');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('Admin/Properties/Index')
+            ->has('properties.data', 1)
+            ->where('properties.data.0.city', 'Miami')
+        );
+    }
+
+    public function test_it_can_search_properties_by_address(): void
+    {
+        Property::factory()->create(['address' => '123 Main Street']);
+        Property::factory()->create(['address' => '456 Oak Avenue']);
+
+        $response = $this->get('/admin/properties?search=Main');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('Admin/Properties/Index')
+            ->has('properties.data', 1)
+        );
+    }
+
+    public function test_search_returns_empty_when_no_match(): void
+    {
+        Property::factory()->create(['name' => 'Beach House']);
+
+        $response = $this->get('/admin/properties?search=xxxxxx');
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('Admin/Properties/Index')
+            ->has('properties.data', 0)
+        );
+    }
 }

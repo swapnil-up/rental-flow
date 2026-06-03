@@ -20,6 +20,10 @@ class PropertiesController extends Controller
     {
         $query = Property::query();
 
+        if ($search = $request->get('search')) {
+            $query->search($search);
+        }
+
         if ($city = $request->get('city')) {
             $query->where('city', 'like', "%{$city}%");
         }
@@ -48,7 +52,7 @@ class PropertiesController extends Controller
 
         return Inertia::render('Admin/Properties/Index', [
             'properties' => $properties,
-            'filters' => $request->only(['city', 'type', 'status', 'bedrooms', 'min_price', 'max_price']),
+            'filters' => $request->only(['search', 'city', 'type', 'status', 'bedrooms', 'min_price', 'max_price']),
             'statuses' => PropertyStatus::cases(),
         ]);
     }

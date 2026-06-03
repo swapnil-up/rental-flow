@@ -8,6 +8,7 @@
         </div>
 
         <div class="filters">
+            <input v-model="filters.search" placeholder="Search name, city, address..." @input="applyFilters" class="search-input" />
             <input v-model="filters.city" placeholder="City" @input="applyFilters" />
             <select v-model="filters.type" @change="applyFilters">
                 <option value="">All Types</option>
@@ -91,6 +92,7 @@ const props = defineProps({
 });
 
 const filters = reactive({
+    search: props.filters?.search || '',
     city: props.filters?.city || '',
     type: props.filters?.type || '',
     status: props.filters?.status || '',
@@ -112,7 +114,7 @@ const applyFilters = () => {
 };
 
 const clearFilters = () => {
-    Object.assign(filters, { city: '', type: '', status: '', bedrooms: '', min_price: '', max_price: '' });
+    Object.assign(filters, { search: '', city: '', type: '', status: '', bedrooms: '', min_price: '', max_price: '' });
     router.get('/admin/properties', {}, { preserveState: true, replace: true });
 };
 </script>
@@ -138,6 +140,10 @@ const clearFilters = () => {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+}
+
+.search-input {
+    min-width: 280px;
 }
 
 .btn-clear {
