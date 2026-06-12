@@ -4,6 +4,8 @@ namespace App\Admin\Bookings\Controllers;
 
 use App\Admin\Bookings\Requests\BookingRequest;
 use App\Http\Controllers\Controller;
+use App\Notifications\BookingCancelled;
+use App\Notifications\BookingConfirmed;
 use Domain\Bookings\Actions\ConfirmBookingAction;
 use Domain\Bookings\Actions\CancelBookingAction;
 use Domain\Bookings\Actions\CreateBookingAction;
@@ -129,7 +131,12 @@ class BookingsController extends Controller
     ): RedirectResponse {
         try {
             $action->execute($booking);
-            
+            $booking->load('property', 'tenant');
+
+            if ($booking->tenant) {
+                $booking->tenant->notify(new BookingConfirmed($booking));
+            }
+
             return back()->with('success', 'Booking confirmed successfully!');
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
@@ -142,7 +149,12 @@ class BookingsController extends Controller
     ): RedirectResponse {
         try {
             $action->execute($booking);
-            
+            $booking->load('property', 'tenant');
+
+            if ($booking->tenant) {
+                $booking->tenant->notify(new BookingCancelled($booking));
+            }
+
             return back()->with('success', 'Booking cancelled successfully!');
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());

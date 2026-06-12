@@ -4,6 +4,7 @@ namespace App\Admin\Maintenance\Controllers;
 
 use App\Admin\Maintenance\Requests\TransitionMaintenanceRequest;
 use App\Http\Controllers\Controller;
+use App\Notifications\MaintenanceStatusChanged;
 use Domain\Maintenance\Models\MaintenanceRequest;
 use Domain\Maintenance\States\MaintenanceRequestStatus;
 use Domain\Properties\Models\Property;
@@ -88,6 +89,11 @@ class MaintenanceRequestsController extends Controller
         }
 
         $maintenanceRequest->update(['status' => $target]);
+        $maintenanceRequest->load('property', 'tenant');
+
+        if ($maintenanceRequest->tenant) {
+            $maintenanceRequest->tenant->notify(new MaintenanceStatusChanged($maintenanceRequest));
+        }
 
         return back()->with('success', "Request moved to {$target->label()}");
     }

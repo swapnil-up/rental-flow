@@ -3,6 +3,7 @@
         <div class="header">
             <h1>Booking #{{ booking.id }}</h1>
             <div class="header-actions">
+                <a :href="`/admin/bookings/${booking.id}/lease`" class="btn">Download Lease</a>
                 <button @click="destroy" class="btn btn-danger">Delete</button>
                 <Link href="/admin/bookings" class="back-link">Back to List</Link>
             </div>

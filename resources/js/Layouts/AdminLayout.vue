@@ -8,6 +8,8 @@
             <Link href="/admin/tenants">Tenants</Link>
             <Link href="/admin/maintenance">Maintenance</Link>
             <Link href="/admin/payments">Payments</Link>
+            <Link href="/admin/expenses">Expenses</Link>
+            <Link href="/admin/reports/profit-loss">P&amp;L</Link>
             <span class="nav-spacer"></span>
             <span class="user-info">{{ $page.props.auth.user?.name }}</span>
             <Link href="/logout" method="post" as="button" class="btn-logout">Logout</Link>

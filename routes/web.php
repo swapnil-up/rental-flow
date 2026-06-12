@@ -1,12 +1,18 @@
 <?php
 
+use App\Admin\Bookings\Actions\GenerateLeasePdfAction;
 use App\Admin\Bookings\Controllers\BookingsController;
 use App\Admin\Calendar\Controllers\CalendarController;
 use App\Admin\Dashboard\Controllers\DashboardController as AdminDashboardController;
+use App\Admin\Expenses\Controllers\ExpensesController;
 use App\Admin\Maintenance\Controllers\MaintenanceRequestsController;
 use App\Admin\Payments\Controllers\PaymentsController;
 use App\Admin\Properties\Controllers\PropertiesController;
+use App\Admin\Reports\Controllers\ProfitLossController;
 use App\Admin\Tenants\Controllers\TenantsController;
+use App\Http\Controllers\Public\InquiryController;
+use App\Http\Controllers\Public\PropertyController as PublicPropertyController;
+use Domain\Bookings\Models\Booking;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -14,6 +20,11 @@ use App\Http\Controllers\Tenant\DashboardController as TenantDashboardController
 use App\Http\Controllers\Tenant\MaintenanceController;
 use App\Http\Controllers\Tenant\PaymentController;
 use Illuminate\Support\Facades\Route;
+
+// Public routes
+Route::get('properties', [PublicPropertyController::class, 'index'])->name('public.properties.index');
+Route::get('properties/{property}', [PublicPropertyController::class, 'show'])->name('public.properties.show');
+Route::post('properties/{property}/inquiry', [InquiryController::class, 'store'])->name('public.properties.inquiry');
 
 // Guest routes
 Route::middleware('guest')->group(function () {
@@ -38,6 +49,10 @@ Route::middleware('auth')->group(function () {
             ->name('bookings.confirm');
         Route::post('bookings/{booking}/cancel', [BookingsController::class, 'cancel'])
             ->name('bookings.cancel');
+        Route::get('bookings/{booking}/lease', function (Booking $booking) {
+            $action = app(GenerateLeasePdfAction::class);
+            return $action->execute($booking);
+        })->name('bookings.lease');
         Route::resource('tenants', TenantsController::class);
         Route::get('maintenance', [MaintenanceRequestsController::class, 'index'])
             ->name('maintenance.index');
@@ -49,6 +64,8 @@ Route::middleware('auth')->group(function () {
         Route::get('payments/{payment}', [PaymentsController::class, 'show'])->name('payments.show');
         Route::post('payments/{payment}/paid', [PaymentsController::class, 'markPaid'])->name('payments.paid');
         Route::post('payments/{payment}/refund', [PaymentsController::class, 'markRefunded'])->name('payments.refund');
+        Route::resource('expenses', ExpensesController::class);
+        Route::get('reports/profit-loss', [ProfitLossController::class, 'index'])->name('reports.profit-loss');
     });
 
     // Tenant routes
@@ -61,10 +78,10 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-// Fallback for logged-in users hitting /login or /register
+// Fallback
 Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->isAdmin() ? redirect('/admin/dashboard') : redirect('/dashboard');
     }
-    return redirect('/login');
+    return redirect('/properties');
 });
