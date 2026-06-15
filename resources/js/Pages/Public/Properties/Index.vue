@@ -5,9 +5,7 @@
             <input v-model="search" placeholder="Search by name or city..." @input="applySearch" class="search-input" />
         </div>
 
-        <div v-if="properties.data.length === 0" class="empty">
-            <p>No properties available right now. Check back soon!</p>
-        </div>
+        <EmptyState v-if="properties.data.length === 0" title="No properties available" description="Check back soon for new listings!" />
 
         <div v-else class="grid">
             <div v-for="p in properties.data" :key="p.id" class="card">
@@ -28,6 +26,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import { ref } from 'vue';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
@@ -48,7 +47,6 @@ const formatMoney = (c) => (c / 100).toFixed(2);
 .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 10px; }
 h1 { margin: 0; font-size: 24px; }
 .search-input { padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; min-width: 260px; }
-.empty { text-align: center; padding: 60px 20px; color: #6b7280; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 .card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; transition: box-shadow 0.2s; }
 .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }

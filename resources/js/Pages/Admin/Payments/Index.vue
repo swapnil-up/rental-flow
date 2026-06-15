@@ -22,9 +22,7 @@
             <button @click="clearFilters" class="btn-clear">Clear</button>
         </div>
 
-        <div v-if="payments.data.length === 0" class="empty-state">
-            <p>No payments.</p>
-        </div>
+        <EmptyState v-if="payments.data.length === 0" title="No payments found" description="Payments will appear here once tenants make them." />
 
         <table v-else class="table">
             <thead>
@@ -65,6 +63,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { reactive } from 'vue';
@@ -95,7 +94,6 @@ h1 { margin: 0; }
 .filters select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
 .btn-clear { padding: 8px 12px; background: #6b7280; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
 .btn-clear:hover { background: #4b5563; }
-.empty-state { padding: 40px; text-align: center; background: #f7fafc; border-radius: 8px; }
 .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
 .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
 .table th { background: #f7fafc; font-weight: 600; }

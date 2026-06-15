@@ -5,9 +5,9 @@
             <Link href="/maintenance/create" class="btn">New Request</Link>
         </div>
 
-        <div v-if="requests.length === 0" class="empty-state">
-            <p>No maintenance requests. <Link href="/maintenance/create">Submit one!</Link></p>
-        </div>
+        <EmptyState v-if="requests.length === 0" title="No maintenance requests" description="Submit a request if something needs repair.">
+            <Link href="/maintenance/create" class="btn">Submit Request</Link>
+        </EmptyState>
 
         <table v-else class="table">
             <thead>
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import TenantLayout from '@/Layouts/TenantLayout.vue';
 import { Link } from '@inertiajs/vue3';
 
@@ -51,7 +52,6 @@ const getColor = (c) => ({ red: '#ef4444', orange: '#f59e0b', blue: '#3b82f6', g
 h1 { margin: 0; font-size: 22px; }
 .btn { padding: 8px 16px; background: #3490dc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; }
 .btn:hover { background: #2779bd; }
-.empty-state { padding: 40px; text-align: center; background: #f7fafc; border-radius: 8px; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
 .table th { background: #f7fafc; font-weight: 600; }

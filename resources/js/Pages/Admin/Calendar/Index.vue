@@ -60,12 +60,14 @@
                     </tbody>
                 </table>
             </div>
+            <EmptyState v-else title="No bookings this month" description="The calendar will show bookings once they are confirmed." />
         </div>
     </AdminLayout>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link } from '@inertiajs/vue3';
 

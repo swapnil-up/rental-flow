@@ -2,9 +2,7 @@
     <TenantLayout>
         <h1>My Payments</h1>
 
-        <div v-if="payments.length === 0" class="empty-state">
-            <p>No payments yet.</p>
-        </div>
+        <EmptyState v-if="payments.length === 0" title="No payments yet" description="Your payment history will appear here." />
 
         <table v-else class="table">
             <thead>
@@ -36,6 +34,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import TenantLayout from '@/Layouts/TenantLayout.vue';
 
 defineProps({ payments: Array });
@@ -47,7 +46,6 @@ const getColor = (c) => ({ orange: '#f59e0b', green: '#10b981', red: '#ef4444', 
 
 <style scoped>
 h1 { margin: 0 0 20px; }
-.empty-state { padding: 40px; text-align: center; background: #f7fafc; border-radius: 8px; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
 .table th { background: #f7fafc; font-weight: 600; }

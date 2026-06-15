@@ -45,13 +45,12 @@
             </table>
         </div>
 
-        <div v-else class="empty-state">
-            <p>This tenant has no bookings yet.</p>
-        </div>
+        <EmptyState v-else title="No bookings yet" description="This tenant has no bookings yet." />
     </AdminLayout>
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 
@@ -87,5 +86,4 @@ h1 { margin: 0; }
 .table th { background: #f7fafc; font-weight: 600; }
 .link { color: #3490dc; text-decoration: none; }
 .link:hover { text-decoration: underline; }
-.empty-state { padding: 40px; text-align: center; background: #f7fafc; border-radius: 8px; }
 </style>

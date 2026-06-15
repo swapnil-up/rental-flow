@@ -63,12 +63,13 @@
             </tfoot>
         </table>
 
-        <p v-if="rows.length === 0" class="empty">No data for this period.</p>
+        <EmptyState v-if="rows.length === 0" title="No data for this period" description="Try selecting a different date range." />
     </AdminLayout>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import EmptyState from '@/Components/EmptyState.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -123,5 +124,4 @@ h1 { margin: 0; }
 .positive { color: #10b981; }
 .negative { color: #ef4444; }
 .total-row td { border-top: 2px solid #333; }
-.empty { padding: 40px; text-align: center; color: #9ca3af; }
 </style>

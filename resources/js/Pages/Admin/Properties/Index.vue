@@ -33,11 +33,9 @@
             <button @click="clearFilters" class="btn-clear">Clear</button>
         </div>
 
-        <div v-if="properties.data.length === 0" class="empty-state">
-            <p>No properties found.
-                <Link href="/admin/properties/create">Create one!</Link>
-            </p>
-        </div>
+        <EmptyState v-if="properties.data.length === 0" title="No properties found" description="Create your first property to start managing rentals.">
+            <Link href="/admin/properties/create" class="btn">Create Property</Link>
+        </EmptyState>
 
         <table v-else class="table">
             <thead>
@@ -81,6 +79,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { reactive } from 'vue';
@@ -175,13 +174,6 @@ h1 {
 
 .btn:hover {
     background: #2779bd;
-}
-
-.empty-state {
-    padding: 40px;
-    text-align: center;
-    background: #f7fafc;
-    border-radius: 8px;
 }
 
 .table {

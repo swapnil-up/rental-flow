@@ -2,9 +2,7 @@
     <TenantLayout>
         <h1>My Bookings</h1>
 
-        <div v-if="bookings.length === 0" class="empty-state">
-            <p>You don't have any bookings yet.</p>
-        </div>
+        <EmptyState v-if="bookings.length === 0" title="No bookings yet" description="Your bookings will appear here once they are created." />
 
         <table v-else class="table">
             <thead>
@@ -32,6 +30,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import TenantLayout from '@/Layouts/TenantLayout.vue';
 
 defineProps({
@@ -48,7 +47,6 @@ const getBadgeColor = (color) => {
 
 <style scoped>
 h1 { margin: 0 0 20px; }
-.empty-state { padding: 40px; text-align: center; background: #f7fafc; border-radius: 8px; }
 .table { width: 100%; border-collapse: collapse; }
 .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
 .table th { background: #f7fafc; font-weight: 600; }

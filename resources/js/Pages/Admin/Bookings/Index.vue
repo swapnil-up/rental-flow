@@ -19,9 +19,7 @@
             <button @click="clearFilters" class="btn-clear">Clear</button>
         </div>
 
-        <div v-if="bookings.data.length === 0" class="empty-state">
-            <p>No bookings found.</p>
-        </div>
+        <EmptyState v-if="bookings.data.length === 0" title="No bookings found" description="Create a booking to get started." />
 
         <table v-else class="table">
             <thead>
@@ -102,6 +100,7 @@
 </template>
 
 <script setup>
+import EmptyState from '@/Components/EmptyState.vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ref, reactive } from 'vue';
@@ -188,12 +187,7 @@ h1 {
     margin: 0;
 }
 
-.empty-state {
-    padding: 40px;
-    text-align: center;
-    background: #f7fafc;
-    border-radius: 8px;
-}
+.badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; color: white; }
 
 .table {
     width: 100%;
