@@ -16,6 +16,7 @@ use Domain\Bookings\Models\Booking;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Tenant\BookingController;
 use App\Http\Controllers\Tenant\DashboardController as TenantDashboardController;
 use App\Http\Controllers\Tenant\MaintenanceController;
 use App\Http\Controllers\Tenant\PaymentController;
@@ -71,6 +72,8 @@ Route::middleware('auth')->group(function () {
     // Tenant routes
     Route::middleware('tenant')->group(function () {
         Route::get('dashboard', [TenantDashboardController::class, 'index'])->name('dashboard');
+        Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
+        Route::post('bookings/{booking}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
         Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index');
         Route::get('maintenance/create', [MaintenanceController::class, 'create'])->name('maintenance.create');
         Route::post('maintenance', [MaintenanceController::class, 'store'])->name('maintenance.store');
