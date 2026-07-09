@@ -83,7 +83,8 @@ class BookingsController extends Controller
             $booking = $createBookingAction->execute(
                 $property,
                 $data->check_in,
-                $data->check_out
+                $data->check_out,
+                $data->tenant_id,
             );
 
             return redirect()

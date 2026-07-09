@@ -18,9 +18,9 @@ class CreateBookingAction
     public function execute(
         Property $property,
         Carbon $checkIn,
-        Carbon $checkOut
+        Carbon $checkOut,
+        ?int $tenantId = null,
     ): Booking {
-        // Check availability
         $isAvailable = $this->checkAvailabilityAction->execute(
             $property,
             $checkIn,
@@ -33,13 +33,12 @@ class CreateBookingAction
             );
         }
 
-        // Create the booking
         $booking = Booking::create([
             'property_id' => $property->id,
             'check_in' => $checkIn,
             'check_out' => $checkOut,
             'status' => BookingStatus::Pending,
-            'tenant_id' => request('tenant_id'),
+            'tenant_id' => $tenantId,
         ]);
 
         Log::info('Booking created', [

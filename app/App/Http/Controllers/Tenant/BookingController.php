@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use Domain\Bookings\Actions\CancelBookingAction;
 use Domain\Bookings\Models\Booking;
 use Domain\Bookings\States\BookingStatus;
 use Illuminate\Http\RedirectResponse;
@@ -35,17 +36,17 @@ class BookingController extends Controller
         ]);
     }
 
-    public function cancel(int $id): RedirectResponse
+    public function cancel(int $id, CancelBookingAction $cancelBooking): RedirectResponse
     {
         $tenant = auth()->user()->tenant;
         $booking = Booking::where('tenant_id', $tenant->id)->findOrFail($id);
 
-        if ($booking->status !== BookingStatus::Pending) {
-            return back()->with('error', 'Only pending bookings can be cancelled.');
+        try {
+            $cancelBooking->execute($booking);
+
+            return back()->with('success', 'Booking cancelled successfully.');
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        $booking->update(['status' => BookingStatus::Cancelled]);
-
-        return back()->with('success', 'Booking cancelled successfully.');
     }
 }
